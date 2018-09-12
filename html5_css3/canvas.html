@@ -1,0 +1,277 @@
+<!Doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		
+	</head>
+	<body>
+		<canvas id="canvas_0" width="400" height="300"></canvas>
+		<canvas id="canvas_circle" width="300" height="300"></canvas>
+		<canvas id="canvas_text" width="800" height="300"></canvas>
+		<hr/>
+		<canvas id="canvas_moving" width="800" height="300"></canvas>
+		<canvas id="canvas_star_meteor" width="800" height="300"></canvas>
+		
+		<script>
+			window.onload=function(){
+				var canvas_0=document.getElementById("canvas_0");
+				var context_0=canvas_0.getContext("2d");
+				
+				context_0.fillStyle="green";
+				context_0.fillRect(0,0,400,300);
+				
+				context_0.strokeStyle="white";
+				context_0.strokeRect(50,50,180,180);
+				context_0.strokeRect(100,100,180,180);
+				
+				
+				draw_circle();
+				
+				draw_text();
+				
+				draw_moving();
+				
+				draw_star_meteor();
+			};
+						
+			function draw_circle(){
+				var  canvas=document.getElementById("canvas_circle");
+				var context=canvas.getContext("2d");
+				
+				context.fillStyle="#f1f2f3";
+				context.fillRect(0,0,300,300);
+				
+				var colors=["red","orange","yellow","green","blue","black","pink","black","black","black"];
+				
+				for(var i=0;i<10;i++){
+					context.beginPath();
+					context.arc((i+1)*25,(i+1)*25,(i+1)*10,0,Math.PI*2,true);	
+					context.closePath();					
+					context.fillStyle="rgba(255,0,0,0.25)";
+					context.fill();
+					context.strokeStyle=colors[i];
+					context.stroke();										
+				}
+				
+			}
+		
+			function draw_text(){
+				var canvas=document.getElementById("canvas_text");
+				var context=canvas.getContext("2d");
+				
+				context.fillStyle="green";
+				context.fillRect(0,0,800,300);
+				
+				context.font="bold 40px '微软雅黑'";
+				context.textBaseline="hanging";
+				context.textAlign="left";
+				context.fillStyle="#fff";
+				context.fillText("白日依山尽",0,20);
+				context.fillText("黄河入海流",40,80);
+				context.fillText("欲穷千里目",80,140);
+				context.fillText("更上一层楼",120,200);
+				context.fillText("1234567891011121314151617181920212223242526272829",0,240);
+				context.fillText("1234567891011121314151617181920212223242526272829",0,280,800);
+			}
+		
+			var i_moving=0;
+			function draw_moving(){
+				var canvas=document.getElementById("canvas_moving");
+				var context=canvas.getContext("2d");
+				
+				context.strokeStyle="gray";
+				context.strokeRect(0,0,800,300);
+				
+				setInterval(function(){
+					context.fillStyle="green";
+					context.fillRect(i_moving,20,10,10);
+					
+					context.fillRect(i_moving,i_moving+40,10,10);
+					context.fillRect(i_moving,260-i_moving,10,10);
+					
+					i_moving+=20;
+				},100);
+			}
+		
+			var starArr = []
+			for (var i = 0; i < 50; i++) {
+			  starArr.push({
+			    x: parseInt(Math.random() * 800),
+			    y: parseInt(Math.random() * 300),
+			    r: parseInt(Math.random() * 7) + 3,
+			    opacity: 1,
+			    opacitySpeed: 0.02
+			  });
+			}
+			
+			var meteorArr = [];
+			for (var i = 0; i < 50; i++) {
+			  meteorArr.push({
+			    x: Math.random() * 800 * 20,
+			    y: -Math.random() * 300,
+			    r: 0.1,
+			    opacity: 1
+			  });
+			}
+			
+			function draw_star_meteor(){
+				var canvas=document.getElementById("canvas_star_meteor");
+				var context=canvas.getContext("2d");
+
+				setInterval(function(){
+					context.clearRect(0,0,canvas.width,canvas.height);
+					context.fillStyle="black";
+					context.fillRect(0,0,canvas.width,canvas.height);
+										
+					draw_stars(context,canvas.width,canvas.height);
+					context.fillStyle="white";										
+					draw_meteor(context,canvas.width,canvas.height);
+				},20);
+				
+			}
+			
+			
+			function draw_star(context,width,height){
+				context.fillStyle="white";
+				var x=50,y=50,r=6;
+			
+				var  angle_18=Math.PI/10;
+				var  angle_36=Math.PI/5;
+				var  angle_72= 4 * Math.PI/10;
+				//A:顶点，顺时针方向
+				var a_x_offset=0;
+				var a_y_offset=0;
+				//B
+				var b_x_offset=r*Math.sin(angle_18);
+				var b_y_offset=r*Math.cos(angle_18);
+				//C
+				var c_x_offset=r+b_x_offset;
+				var c_y_offset=b_y_offset;
+				//D
+				var d_x_offset=2 * r * Math.sin(angle_18) * Math.cos(angle_36) ;
+				var d_y_offset=r * Math.cos(angle_36) * Math.tan(angle_72) - r * Math.sin(angle_36) - 2 * r * Math.sin(angle_18) * Math.sin(angle_36);
+				//E
+				var e_x_offset=r*Math.cos(angle_36);
+				var e_y_offset=r*Math.cos(angle_36) * Math.tan(angle_72);
+				//F
+				var f_x_offset=0;
+				var f_y_offset=r*Math.cos(angle_36) * Math.tan(angle_72) - r * Math.sin(angle_36);
+				//G
+				var g_x_offset=-e_x_offset;
+				var g_y_offset=e_y_offset;
+				//H
+				var h_x_offset=-d_x_offset;
+				var h_y_offset=d_y_offset;
+				//I
+				var i_x_offset=-c_x_offset;
+				var i_y_offset=c_y_offset;
+				//J
+				var j_x_offset=-b_x_offset;
+				var j_y_offset=b_y_offset;
+				
+				context.beginPath();
+				context.moveTo(x,y);				
+				context.lineTo(x + b_x_offset , y + b_y_offset);//B
+				context.lineTo(x + c_x_offset , y + c_y_offset);//C
+				context.lineTo(x + d_x_offset , y + d_y_offset);//D
+				context.lineTo(x + e_x_offset , y + e_y_offset);//E
+				context.lineTo(x + f_x_offset , y + f_y_offset);//F
+				context.lineTo(x + g_x_offset , y + g_y_offset);//G
+				context.lineTo(x + h_x_offset , y + h_y_offset);//H
+				context.lineTo(x + i_x_offset , y + i_y_offset);//I
+				context.lineTo(x + j_x_offset , y + j_y_offset);//J				
+				context.lineTo(x,y);//A
+				context.fill();
+				context.closePath();
+			}
+		
+			function draw_meteor(context,width,height){
+				for(var  i=0;i<meteorArr.length;i++){
+					var x=meteorArr[i].x,y=meteorArr[i].y,r=meteorArr[i].r;
+					//每一个流星就是一个长条：由70个原组成一条线
+					for(var j=r;j<70;j++){						
+						context.beginPath();
+						context.arc(x,y,r,0,2*Math.PI,true);
+						//改变每个圆点的位置和半径，从而形成一条直线
+						r += 0.02;
+				        x -= 2;
+				        y += 1;
+						context.fill();
+						context.closePath();
+					}
+					//改变该流星的位置，下次绘制时才能体现出轨迹变化
+					meteorArr[i].x-=16;
+					meteorArr[i].y+=8;
+					//如果超出画布，则重置该流星的初始位置
+					if(meteorArr[i].y>height+50){
+						meteorArr[i].x = Math.random() * width * 20;
+		      			meteorArr[i].y = -Math.random() * height;
+					}
+				}
+			}
+		
+			function draw_stars(context,width,height){
+				
+				for(var i=0;i<starArr.length;i++){
+					var x = starArr[i].x, y = starArr[i].y, r = starArr[i].r, opacity = starArr[i].opacity;
+					context.fillStyle='rgba(255,255,255,' + opacity + ')';
+					var  angle_18=Math.PI/10;
+					var  angle_36=Math.PI/5;
+					var  angle_72= 4 * Math.PI/10;
+					//A:顶点，顺时针方向
+					var a_x_offset=0;
+					var a_y_offset=0;
+					//B
+					var b_x_offset=r*Math.sin(angle_18);
+					var b_y_offset=r*Math.cos(angle_18);
+					//C
+					var c_x_offset=r+b_x_offset;
+					var c_y_offset=b_y_offset;
+					//D
+					var d_x_offset=2 * r * Math.sin(angle_18) * Math.cos(angle_36) ;
+					var d_y_offset=r * Math.cos(angle_36) * Math.tan(angle_72) - r * Math.sin(angle_36) - 2 * r * Math.sin(angle_18) * Math.sin(angle_36);
+					//E
+					var e_x_offset=r*Math.cos(angle_36);
+					var e_y_offset=r*Math.cos(angle_36) * Math.tan(angle_72);
+					//F
+					var f_x_offset=0;
+					var f_y_offset=r*Math.cos(angle_36) * Math.tan(angle_72) - r * Math.sin(angle_36);
+					//G
+					var g_x_offset=-e_x_offset;
+					var g_y_offset=e_y_offset;
+					//H
+					var h_x_offset=-d_x_offset;
+					var h_y_offset=d_y_offset;
+					//I
+					var i_x_offset=-c_x_offset;
+					var i_y_offset=c_y_offset;
+					//J
+					var j_x_offset=-b_x_offset;
+					var j_y_offset=b_y_offset;
+					
+					context.beginPath();
+					context.moveTo(x,y);				
+					context.lineTo(x + b_x_offset , y + b_y_offset);//B
+					context.lineTo(x + c_x_offset , y + c_y_offset);//C
+					context.lineTo(x + d_x_offset , y + d_y_offset);//D
+					context.lineTo(x + e_x_offset , y + e_y_offset);//E
+					context.lineTo(x + f_x_offset , y + f_y_offset);//F
+					context.lineTo(x + g_x_offset , y + g_y_offset);//G
+					context.lineTo(x + h_x_offset , y + h_y_offset);//H
+					context.lineTo(x + i_x_offset , y + i_y_offset);//I
+					context.lineTo(x + j_x_offset , y + j_y_offset);//J				
+					context.lineTo(x,y);//A
+					context.fill();
+					context.closePath();
+					
+					starArr[i].opacity -= starArr[i].opacitySpeed;
+				    if (starArr[i].opacity <= 0.2 || starArr[i].opacity >= 1) {
+				      starArr[i].opacitySpeed = -starArr[i].opacitySpeed;
+				    }
+				}
+				
+			}
+		
+		</script>
+	</body>
+</html>
