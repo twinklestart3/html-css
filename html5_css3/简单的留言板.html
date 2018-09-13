@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>简单的留言板</title>
+	</head>
+	<body>
+		<h1>简单的留言板</h1>
+		<textarea id="dome" cols="60" rows="10"></textarea>
+		<br/>
+		<input type="button" value="保存" onclick="saveStorage('dome');"/>
+		<input type="button" value="清空" onclick="clearStorage('msg');"/>
+		<input type="button" value="读取" onclick="loadStorage('msg');"/>
+		
+		<hr/>
+		<div id="msg"></div>
+		
+		<script>
+			function saveStorage(id){
+				var str = document.getElementById(id).value;
+				localStorage.setItem(new Date().getTime(),str);
+				alert("保存成功");
+				loadStorage("msg");
+			}
+			
+			function loadStorage(id){
+				var target = document.getElementById(id);
+				var table = "<table cellpadding='0' cellspacing='0' border='1'>";
+				for(var i=0;i<localStorage.length;i++){
+					var key = localStorage.key(i);
+					var value =  localStorage.getItem(key);
+					table+="<tr><td>"+(i+1)+"</td><td>"+value+"</td><td>"+new Date(parseInt(key)).toLocaleString()+"</td></tr>"
+				}
+				table += "</table>"
+				target.innerHTML= table;
+			}
+			
+			function clearStorage(id){
+				localStorage.clear();
+				alert("数据已清空");
+				loadStorage("msg");
+			}
+		</script>
+	</body>
+</html>
