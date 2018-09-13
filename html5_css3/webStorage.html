@@ -1,0 +1,49 @@
+<!Doctype html>
+<html>
+	<head>
+		<title>Web Storage 本地缓存</title>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+		<h1>sessionStorage</h1>
+		<p id="txt_session"></p>
+		<input type="text" id="msg_session">
+		<input type="button"  value="保存缓存" onclick="saveSessionStorage('msg_session')"/>
+		<input type="button"  value="读取缓存" onclick="loadSessionStorage('txt_session')"/>
+		
+		<hr/>
+		
+		<h1>localStorage</h1>
+		<p id="txt_local"></p>
+		<input type="text" id="msg_local">
+		<input type="button"  value="保存缓存" onclick="savelocalStorage('msg_local')"/>
+		<input type="button"  value="读取缓存" onclick="loadlocalStorage('txt_local')"/>
+		
+		<script>
+			function saveSessionStorage(id){
+				var target=document.getElementById(id);
+				var str = target.value;
+				sessionStorage.setItem("msg_session",str);
+			}
+			
+			function loadSessionStorage(id){
+				var target = document.getElementById(id);
+				var str = sessionStorage.getItem("msg_session");
+				target.innerHTML=str;
+			}
+			
+			function savelocalStorage(id){
+				var target=document.getElementById(id);
+				var str = target.value;
+				localStorage.setItem("msg_local",str);
+			}
+			
+			function loadlocalStorage(id){
+				var target = document.getElementById(id);
+				var str = localStorage.getItem("msg_local");
+				target.innerHTML=str;
+			}
+		</script>
+		
+	</body>
+</html>
